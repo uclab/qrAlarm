@@ -4,23 +4,44 @@ package sch.cse.qralarm;
 import android.app.Activity;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.util.Arrays;
 
 
 /**
  * Created by Youngsun on 7/23/2015.
  */
 public class MainSettingActivity extends ActionBarActivity {
+
+    private BackPressCloseHandler backPressCloseHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_setting);
-        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -43,8 +64,6 @@ public class MainSettingActivity extends ActionBarActivity {
                 .setTabListener(new TabListener<SettingFragment>(
                         this, "Setting", SettingFragment.class));
         actionBar.addTab(tab);
-
-
     }
 
     public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
@@ -90,5 +109,39 @@ public class MainSettingActivity extends ActionBarActivity {
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
             // User selected the already selected tab. Usually do nothing.
         }
+    }
+
+    //for QR Result
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("QRResult", "onActivityResult");
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Log.d("QRResult", "Cancelled scan");
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Log.d("QRResult", "Scanned");
+                //byte[] dataBytes = data.getByteArrayExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX);
+                String strResult = data.getStringExtra(Intents.Scan.RESULT);
+                //String strResult = result.getFormatName();
+                //String strResult = new String(dataBytes);
+
+                QRFragment.makeQR(this,strResult,getWindow().getDecorView().findViewById(android.R.id.content));
+                Toast.makeText(this,strResult , Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Log.d("QRResult", "Weird");
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+
+        backPressCloseHandler.onBackPressed();
     }
 }
