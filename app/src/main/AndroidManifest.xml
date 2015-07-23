@@ -18,6 +18,14 @@
         </activity>
 
 
+        <activity
+            android:name=".MainSettingActivity"
+            android:label="MainSettingActivity"></activity>
+
+
+
+
     </application>
+
 
 </manifest>
