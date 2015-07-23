@@ -3,13 +3,11 @@ package sch.cse.qralarm;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.io.File;
@@ -50,11 +45,11 @@ public class QRFragment extends Fragment {
         btnMail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences mSF = getActivity().getSharedPreferences("QR_CODE", getActivity().MODE_PRIVATE);
-                String qrStr = mSF.getString("QR_STRING", "");
+                SharedPreferences mSF = getActivity().getSharedPreferences(AppConstant.QR_CODE, getActivity().MODE_PRIVATE);
+                String qrStr = mSF.getString(AppConstant.QR_CODE_STRING, "");
                 if (!qrStr.equals("")) {
                     try {
-                        File bmpfile = SendMail.SaveBitmapToFileCache(getActivity().getApplicationContext(),makeQR(getActivity(),qrStr,rootView));
+                        File bmpfile = SendMail.SaveBitmapToFileCache(getActivity().getApplicationContext(),makeQR(getActivity(), qrStr, rootView));
                         SendMail.send(getActivity().getApplicationContext(),getActivity(),bmpfile);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -79,14 +74,14 @@ public class QRFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        alert.setTitle("Title");
-                        alert.setMessage("Message");
+                        alert.setTitle("QR Generator");
+                        alert.setMessage("Type Keyword");
                         final EditText input = new EditText(getActivity());
                         alert.setView(input);
                         alert.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (!input.getText().toString().equals("")) {
-                                    makeQR(getActivity(), input.getText().toString(), rootView);
+                                    makeQR(getActivity(), input.getText().toString(), getActivity().getWindow().getDecorView().findViewById(android.R.id.content));
                                 }
                             }
                         }).show();
@@ -97,8 +92,8 @@ public class QRFragment extends Fragment {
             }
         });
 
-        SharedPreferences mSF = getActivity().getSharedPreferences("QR_CODE", getActivity().MODE_PRIVATE);
-        String qrStr = mSF.getString("QR_STRING", "");
+        SharedPreferences mSF = getActivity().getSharedPreferences(AppConstant.QR_CODE, getActivity().MODE_PRIVATE);
+        String qrStr = mSF.getString(AppConstant.QR_CODE_STRING, "");
         if (!qrStr.equals("")) {
             makeQR(getActivity(), qrStr, rootView);
         }
@@ -107,7 +102,7 @@ public class QRFragment extends Fragment {
     }
 
     public static Bitmap makeQR(Activity mActivity, String strResult, View rootView) {
-        SharedPreferences mSF = mActivity.getSharedPreferences("QR_CODE", mActivity.MODE_PRIVATE);
+        SharedPreferences mSF = mActivity.getSharedPreferences(AppConstant.QR_CODE, mActivity.MODE_PRIVATE);
         SharedPreferences.Editor msfEditor = mSF.edit();
         ImageView ivQR = (ImageView) rootView.findViewById(R.id.ivQR);
         int width = (int) mActivity.getResources().getDimension(R.dimen.qr_preview_width);
@@ -125,7 +120,7 @@ public class QRFragment extends Fragment {
 
             ivQR.setImageBitmap(mBitmap);
 
-            msfEditor.putString("QR_STRING", strResult);
+            msfEditor.putString(AppConstant.QR_CODE_STRING, strResult);
             msfEditor.commit();
             return mBitmap;
 

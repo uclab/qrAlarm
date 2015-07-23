@@ -2,31 +2,18 @@ package sch.cse.qralarm;
 
 
 import android.app.Activity;
-
-
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Window;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.android.Intents;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.google.zxing.qrcode.QRCodeWriter;
-
-import java.util.Arrays;
 
 
 /**
@@ -122,11 +109,7 @@ public class MainSettingActivity extends ActionBarActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("QRResult", "Scanned");
-                //byte[] dataBytes = data.getByteArrayExtra(Intents.Scan.RESULT_BYTE_SEGMENTS_PREFIX);
                 String strResult = data.getStringExtra(Intents.Scan.RESULT);
-                //String strResult = result.getFormatName();
-                //String strResult = new String(dataBytes);
-
                 QRFragment.makeQR(this,strResult,getWindow().getDecorView().findViewById(android.R.id.content));
                 Toast.makeText(this,strResult , Toast.LENGTH_LONG).show();
                 //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
