@@ -3,6 +3,7 @@ package sch.cse.qralarm;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -102,22 +103,31 @@ public class MainSettingActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.i("QRResult", "onActivityResult");
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Log.d("QRResult", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+        Log.i("QRResult", requestCode+","+resultCode+","+data.getData().getPath());
+        if(resultCode == RESULT_OK && requestCode == 10){
+            Uri uriSound=data.getData();
+
+            SettingFragment.setSound(this, uriSound, getWindow().getDecorView().findViewById(android.R.id.content));
+            Toast.makeText(this,uriSound.getPath(),Toast.LENGTH_SHORT).show();
+        }
+        else {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (result != null) {
+                if (result.getContents() == null) {
+                    Log.d("QRResult", "Cancelled scan");
+                    Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d("QRResult", "Scanned");
+                    String strResult = data.getStringExtra(Intents.Scan.RESULT);
+                    QRFragment.makeQR(this, strResult, getWindow().getDecorView().findViewById(android.R.id.content));
+                    Toast.makeText(this, strResult, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                }
             } else {
-                Log.d("QRResult", "Scanned");
-                String strResult = data.getStringExtra(Intents.Scan.RESULT);
-                QRFragment.makeQR(this,strResult,getWindow().getDecorView().findViewById(android.R.id.content));
-                Toast.makeText(this,strResult , Toast.LENGTH_LONG).show();
-                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Log.d("QRResult", "Weird");
+                // This is important, otherwise the result will not be passed to the fragment
+                super.onActivityResult(requestCode, resultCode, data);
             }
-        } else {
-            Log.d("QRResult", "Weird");
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

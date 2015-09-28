@@ -6,30 +6,59 @@
     <TableRow>
 
         <TextView
-            android:text="Alarm in silent Mode"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Alarm in silent Mode" />
+
         <CheckBox
             android:id="@+id/cbSilent"
-            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true" />
+    </TableRow>
+
+    <TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"/>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="@android:color/darker_gray"/>
+    </TableRow>
+    <TableRow>
+
+        <TextView
             android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Alarm Sound"
+            android:textStyle="bold"
+            />
     </TableRow>
 
     <TableRow>
 
         <TextView
-            android:text="Use 24-hour format"
-            android:layout_weight="1"
+            android:id="@+id/tvselectedsound"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <CheckBox
-            android:id="@+id/cb24hours"
-            android:checked="false"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="No sound selected" />
+        <Button
+            android:id="@+id/btnSearchSound"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select" />
+
     </TableRow>
+
+
 </TableLayout>

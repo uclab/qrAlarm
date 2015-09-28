@@ -6,4 +6,5 @@
     android:textSize="200px"
     android:layout_gravity="center"
     android:textColor="#ff000000"
-    android:textStyle="bold|italic" />
+    />
+<!-- android:textStyle="bold|italic" -->
