@@ -17,4 +17,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:text="Use 24-hour format"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:id="@+id/cb24hours"
+            android:checked="false"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </TableRow>
 </TableLayout>

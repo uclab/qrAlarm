@@ -26,6 +26,7 @@ public class SettingFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 
         final CheckBox cbSilentMode = (CheckBox)rootView.findViewById(R.id.cbSilent);
+        final CheckBox cb24hours = (CheckBox)rootView.findViewById(R.id.cb24hours);
 
         cbSilentMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -42,12 +43,33 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        cb24hours.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences mSF = getActivity().getSharedPreferences(AppConstant.SETTING, getActivity().MODE_PRIVATE);
+                SharedPreferences.Editor mEditor = mSF.edit();
+                if(b) {
+                    mEditor.putBoolean(AppConstant.SETTING_24HOURS,true);
+                }
+                else {
+                    mEditor.putBoolean(AppConstant.SETTING_24HOURS,false);
+                }
+                mEditor.commit();
+            }
+        });
+
         SharedPreferences mSF = getActivity().getSharedPreferences(AppConstant.SETTING, getActivity().MODE_PRIVATE);
-        boolean isSilentMode = mSF.getBoolean(AppConstant.SETTING_SILENT, true);
+        boolean isSilentMode = mSF.getBoolean(AppConstant.SETTING_SILENT, false);
+        boolean is24hours = mSF.getBoolean(AppConstant.SETTING_24HOURS, false);
         if (isSilentMode) {
             cbSilentMode.setChecked(true);
         }
         else cbSilentMode.setChecked(false);
+
+        if (is24hours) {
+            cb24hours.setChecked(true);
+        }
+        else cb24hours.setChecked(false);
 
         return rootView;
     }

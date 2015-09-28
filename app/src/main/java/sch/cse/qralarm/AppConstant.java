@@ -11,5 +11,6 @@ public final class AppConstant {
     public final static String QR_CODE_STRING = "QRCODESTRING";
 
     public final static String SETTING_SILENT = "SETTINGSILENT";
+    public final static String SETTING_24HOURS = "SETTING24HOURS";
 
 }
